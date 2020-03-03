@@ -8,5 +8,6 @@ namespace Group4
 {
     class Bean
     {
+        string countryOrigin = 
     }
 }
