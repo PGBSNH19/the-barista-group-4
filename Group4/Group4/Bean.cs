@@ -8,9 +8,8 @@ namespace Group4
 {
     class Bean
     {
-        public string countyy { get; set; }
-        public double size { get; set; }
-        public string roastLevel { get; set; }
+        public double AmountInG { get; set; }
+        public string Sort { get; set; }
 
     }
 }

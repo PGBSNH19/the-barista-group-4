@@ -8,5 +8,6 @@ namespace Group4
 {
     class Water
     {
+        public int volume { get; set; }
     }
 }
