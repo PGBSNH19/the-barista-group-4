@@ -8,6 +8,9 @@ namespace Group4
 {
     class Bean
     {
-        string countryOrigin = 
+        public string countyy { get; set; }
+        public double size { get; set; }
+        public string roastLevel { get; set; }
+
     }
 }
