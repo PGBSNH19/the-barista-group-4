@@ -7,10 +7,13 @@ namespace Group4.UnitTests
     public class UnitTest1
     {
         [TestMethod]
-        public void TestMethod1()
+        public void TestType()
         {
-            var espresso = new FluentCoffee().CoffeeName(Coffee.Espresso).AddBeans(Beans.Liberia).GrindBeans(true).AddWater(30).Serve();
+            var espresso = new FluentCoffee();
 
+            var result = espresso.CoffeeName(Coffee.Espresso).AddBeans(Beans.Liberia).GrindBeans(true).AddWater(30).Serve();
+
+            Assert.IsInstanceOfType(result, typeof(string));
         }
     }
 }
