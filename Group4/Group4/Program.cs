@@ -26,11 +26,13 @@ namespace Group4
     public interface IName
     {
         IMakeBeverage CoffeeName(Coffee coffee);
+        IMakeBeverage CoffeeName(string coffee);
     }
 
     public interface IMakeBeverage
     {
         IMakeBeverage AddBeans(Beans beans);
+        IMakeBeverage AddBeans(string beans);
         IMakeBeverage GrindBeans(bool grounded);
         IMakeBeverage AddWater(int ml);
         IMakeBeverage AddSteamedMilk(int ml);
@@ -43,7 +45,7 @@ namespace Group4
     class FluentCoffee : IMakeBeverage, IName
     {
         public string Name { get; set; }
-        public string BeanType { get; set; }
+        public string Bean { get; set; }
         public bool IsGrounded { get; set; }
         public int Water { get; set; }
         public int SteamedMilk { get; set; }
@@ -57,9 +59,21 @@ namespace Group4
             return this;
         }
 
+        public IMakeBeverage CoffeeName(string coffee)
+        {
+            Name = coffee;
+            return this;
+        }
+
         public IMakeBeverage AddBeans(Beans beans)
         {
-            BeanType = beans.ToString();
+            Bean = beans.ToString();
+            return this;
+        }
+
+        public IMakeBeverage AddBeans(string beans)
+        {
+            Bean = beans;
             return this;
         }
         public IMakeBeverage GrindBeans(bool grounded)
@@ -95,7 +109,7 @@ namespace Group4
 
         public string Serve()
         {
-            return this.BeanType;
+            return this.Bean;
         }
     }
 
@@ -104,6 +118,9 @@ namespace Group4
         static void Main(string[] args)
         {
             var espresso = new FluentCoffee().CoffeeName(Coffee.Espresso).AddBeans(Beans.Liberia).GrindBeans(true).AddWater(30).Serve();
+            Console.WriteLine(espresso);
+
+            var espresso2 = new FluentCoffee().CoffeeName("Espresso").AddBeans("Liberia").GrindBeans(true).AddWater(30).Serve();
             Console.WriteLine(espresso);
 
             var mocha = new FluentCoffee().CoffeeName(Coffee.Mocha).AddBeans(Beans.Robusta).GrindBeans(true).AddWater(30).AddChocolateSyrup(20).AddSteamedMilk(25).AddWhippedCream(20).Serve();
