@@ -103,7 +103,7 @@ namespace Group4
 
         private void HeatWater(FluentCoffee water)
         {
-            for (int i = water.Temperature; i < 90; i++)
+            for (int i = water.Temperature; i < 99; i++)
             {
                 Thread.Sleep(300);
                 water.Temperature++;
@@ -134,7 +134,7 @@ namespace Group4
 
         public string Serve()
         {
-            return this.Bean;
+            return this.Name;
         }
     }
 
