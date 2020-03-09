@@ -15,7 +15,7 @@ namespace Group4.UnitTests
                 .AddBeans(Beans.Liberia)
                 .GrindBeans(true)
                 .AddWater(new FluentCoffee { Amount=30, Temperature=80, CoffeeTemp=90})
-                .Validate(x=>x.Temperature < 90)
+                .Validate(x=>x.Temperature < x.CoffeeTemp)
                 .Serve();
            
 
