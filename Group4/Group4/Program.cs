@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Group4
@@ -23,18 +24,20 @@ namespace Group4
         Liberia
     }
 
-    public interface IName
+    interface IName
     {
         IMakeBeverage CoffeeName(Coffee coffee);
         IMakeBeverage CoffeeName(string coffee);
     }
 
-    public interface IMakeBeverage
+    interface IMakeBeverage
     {
         IMakeBeverage AddBeans(Beans beans);
         IMakeBeverage AddBeans(string beans);
         IMakeBeverage GrindBeans(bool grounded);
-        IMakeBeverage AddWater(int ml);
+        IMakeBeverage AddWater(FluentCoffee ml);
+        IMakeBeverage Validate(Func<FluentCoffee, bool> waterQuery);
+
         IMakeBeverage AddSteamedMilk(int ml);
         IMakeBeverage AddMilkFoam(int ml);
         IMakeBeverage AddChocolateSyrup(int ml);
@@ -47,7 +50,9 @@ namespace Group4
         public string Name { get; set; }
         public string Bean { get; set; }
         public bool IsGrounded { get; set; }
-        public int Water { get; set; }
+        public FluentCoffee Water { get; set; }
+        public int Temperature { get; set; }
+        public int Amount { get; set; }
         public int SteamedMilk { get; set; }
         public int MilkFoam { get; set; }
         public int ChocolateSyrup { get; set; }
@@ -81,10 +86,30 @@ namespace Group4
             IsGrounded = grounded;
             return this;
         }
-        public IMakeBeverage AddWater(int ml)
+        public IMakeBeverage AddWater(FluentCoffee ml)
         {
-            Water += ml;
+            Water = ml;
             return this;
+        }
+
+        public IMakeBeverage Validate(Func<FluentCoffee, bool> waterTemp)
+        {
+            if (waterTemp.Invoke(Water))
+            {
+                HeatWater(Water);
+            }
+            return this;
+        }
+
+        private void HeatWater(FluentCoffee water)
+        {
+            for (int i = water.Temperature; i < 90; i++)
+            {
+                Thread.Sleep(300);
+                water.Temperature++;
+                Console.WriteLine($"Current Temperature {i}");
+            }
+            Console.WriteLine("Coffee is Ready");
         }
         public IMakeBeverage AddSteamedMilk(int ml)
         {
@@ -117,17 +142,38 @@ namespace Group4
     {
         static void Main(string[] args)
         {
-            var espresso = new FluentCoffee().CoffeeName(Coffee.Espresso).AddBeans(Beans.Liberia).GrindBeans(true).AddWater(30).Serve();
+            var espresso = new FluentCoffee()
+                .CoffeeName(Coffee.Espresso)
+                .AddBeans(Beans.Liberia)
+                .GrindBeans(true)
+                .AddWater(new FluentCoffee { Amount = 30, Temperature = 85 })
+                .Validate(x => x.Temperature < 90)
+                .Serve();
             Console.WriteLine(espresso);
 
-            var espresso2 = new FluentCoffee().CoffeeName("Espresso").AddBeans("Liberia").GrindBeans(true).AddWater(30).Serve();
+            var espresso2 = new FluentCoffee()
+                .CoffeeName("Espresso")
+                .AddBeans("Liberia")
+                .GrindBeans(true)
+                .AddWater(new FluentCoffee { Amount=30, Temperature=85})
+                .Validate(x => x.Temperature < 90)
+                .Serve();
             Console.WriteLine(espresso);
 
-            var mocha = new FluentCoffee().CoffeeName(Coffee.Mocha).AddBeans(Beans.Robusta).GrindBeans(true).AddWater(30).AddChocolateSyrup(20).AddSteamedMilk(25).AddWhippedCream(20).Serve();
+            var mocha = new FluentCoffee()
+                .CoffeeName(Coffee.Mocha)
+                .AddBeans(Beans.Robusta)
+                .GrindBeans(true)
+                .AddWater(new FluentCoffee { Amount=30, Temperature=87})
+                .Validate(x => x.Temperature < 90)
+                .AddChocolateSyrup(20)
+                .AddSteamedMilk(25)
+                .AddWhippedCream(20)
+                .Serve();
             Console.WriteLine(mocha);
 
-            var americano = new FluentCoffee().CoffeeName(Coffee.Americano).AddBeans(Beans.Arabica).GrindBeans(true).AddWater(30).AddWater(60).Serve();
-            Console.WriteLine(americano);
+            //var americano = new FluentCoffee().CoffeeName(Coffee.Americano).AddBeans(Beans.Arabica).GrindBeans(true).AddWater(30).AddWater(60).Serve();
+            //Console.WriteLine(americano);
 
             Console.ReadKey();
         }
