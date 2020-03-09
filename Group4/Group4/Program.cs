@@ -135,7 +135,7 @@ namespace Group4
 
         public string Serve()
         {
-            return this.Bean;
+            return this.Name;
         }
     }
 
