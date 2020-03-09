@@ -51,6 +51,7 @@ namespace Group4
         public string Bean { get; set; }
         public bool IsGrounded { get; set; }
         public FluentCoffee Water { get; set; }
+        public int CoffeeTemp { get; set; }
         public int Temperature { get; set; }
         public int Amount { get; set; }
         public int SteamedMilk { get; set; }
@@ -103,7 +104,7 @@ namespace Group4
 
         private void HeatWater(FluentCoffee water)
         {
-            for (int i = water.Temperature; i < 90; i++)
+            for (int i = water.Temperature; i < water.CoffeeTemp; i++)
             {
                 Thread.Sleep(300);
                 water.Temperature++;
@@ -146,8 +147,8 @@ namespace Group4
                 .CoffeeName(Coffee.Espresso)
                 .AddBeans(Beans.Liberia)
                 .GrindBeans(true)
-                .AddWater(new FluentCoffee { Amount = 30, Temperature = 85 })
-                .Validate(x => x.Temperature < 90)
+                .AddWater(new FluentCoffee { Amount = 30, Temperature = 85, CoffeeTemp=90})
+                .Validate(x => x.Temperature < x.CoffeeTemp)
                 .Serve();
             Console.WriteLine(espresso);
 
@@ -155,8 +156,8 @@ namespace Group4
                 .CoffeeName("Espresso")
                 .AddBeans("Liberia")
                 .GrindBeans(true)
-                .AddWater(new FluentCoffee { Amount=30, Temperature=85})
-                .Validate(x => x.Temperature < 90)
+                .AddWater(new FluentCoffee { Amount=30, Temperature=88, CoffeeTemp=100})
+                .Validate(x => x.Temperature < x.CoffeeTemp)
                 .Serve();
             Console.WriteLine(espresso);
 
@@ -164,16 +165,22 @@ namespace Group4
                 .CoffeeName(Coffee.Mocha)
                 .AddBeans(Beans.Robusta)
                 .GrindBeans(true)
-                .AddWater(new FluentCoffee { Amount=30, Temperature=87})
-                .Validate(x => x.Temperature < 90)
+                .AddWater(new FluentCoffee { Amount=30, Temperature=87, CoffeeTemp = 90 })
+                .Validate(x => x.Temperature < x.CoffeeTemp)
                 .AddChocolateSyrup(20)
                 .AddSteamedMilk(25)
                 .AddWhippedCream(20)
                 .Serve();
             Console.WriteLine(mocha);
 
-            //var americano = new FluentCoffee().CoffeeName(Coffee.Americano).AddBeans(Beans.Arabica).GrindBeans(true).AddWater(30).AddWater(60).Serve();
-            //Console.WriteLine(americano);
+            var americano = new FluentCoffee()
+                .CoffeeName(Coffee.Americano)
+                .AddBeans(Beans.Arabica)
+                .GrindBeans(true)
+                .AddWater(new FluentCoffee { Amount=30, Temperature=90, CoffeeTemp = 95 })
+                .Validate(x => x.Temperature < x.CoffeeTemp)
+                .Serve();
+            Console.WriteLine(americano);
 
             Console.ReadKey();
         }
